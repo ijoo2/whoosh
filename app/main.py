@@ -1,21 +1,17 @@
-from flask import Flask, request
-import requests
+from autocomplete import Autocomplete
+import sys, os
 
-app = Flask(__name__)
+if __name__ == "__main__":
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+    ac = Autocomplete('test.txt')
 
+    while True:
+        user_input = raw_input("Enter input: ").strip('\n')
+        if ac.is_word(user_input):
+            print "lol it's a word"
+        else:
+            print ac.closest_word(user_input)
 
-@app.route('/search', methods=['GET'])
-def search():
-    # implement api call
-    params = request.args
-    url = "http://api.wordnik.com:80/v4/word.json"
-    r = requests.get(url, params=params)
-    pass
+        if user_input == ':q':
+            sys.exit(0)
 
-
-if __name__ == '__main__':
-    app.run()
