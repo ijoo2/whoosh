@@ -56,23 +56,31 @@ class Trie(object):
         try:
             return self.traverse_to_word(node.children[c], word[1:])
         except KeyError:
-            return node
+            return None
 
     def closest_word(self, word):
         node = self.traverse_to_word(self.root, word)
+        result = []
+        if not node:
+            return 'Could not find any words'
 
-        priority = ''
+        priority = (0 , '')
         hq = []
         heappush(hq, (priority, node))
 
         while hq:
             priority, next_node = heapq.heappop(hq)
+
             if next_node.is_word:
-                return word + priority
+                result.append(word + priority[1])
+                if len(result) == 3:
+                    return 'Did you mean ', result
 
             for child in next_node.children.values():
-                heappush(hq, (priority + child.letter, child))
+                heappush(hq, ((priority[0] + 1, priority[1] + child.letter), child))
 
+
+        return "Did you mean ", result
 
 
 class Autocomplete(object):
