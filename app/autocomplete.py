@@ -73,12 +73,11 @@ class Trie(object):
 
             if next_node.is_word:
                 result.append(word + priority[1])
-                if len(result) == 3:
+                if len(result) == 5:
                     return 'Did you mean ', result
 
             for child in next_node.children.values():
                 heappush(hq, ((priority[0] + 1, priority[1] + child.letter), child))
-
 
         return "Did you mean ", result
 
